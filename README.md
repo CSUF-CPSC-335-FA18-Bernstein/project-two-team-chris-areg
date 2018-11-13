@@ -2,6 +2,6 @@
 
 Group members:
 
-Ada Lovelace adalovelace@csu.fullerton.edu
+Chris Baroni: baroni128@csu.fullerton.edu
 
-Charles Babbage charlesbab@csu.fullerton.edu
+Areg Tevanyan: atevanyan@csu.fullerton.edu
