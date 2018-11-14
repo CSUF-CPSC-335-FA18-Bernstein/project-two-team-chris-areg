@@ -23,13 +23,19 @@ using namespace std;
 // Randomize the order of all items in the list
 //-----------------------------------------------------------------------------
 void randomize_list(string_vector & strings) {
-  // TODO: implement this function, then delete this comment
-  return;
+  
+  srand(time(NULL));
+
+  for(int i = 0; i < strings.size(); i++)
+  {
+    int random = rand() % strings.size();
+    swap(strings[i], strings[random]);
+  }
 }
 
 //-----------------------------------------------------------------------------
 void merge(string_vector & strings, size_t start, size_t mid, size_t end) {
-  // TODO: implement this function, then delete this comment
+  
   return;
 }
 
@@ -40,7 +46,11 @@ void merge(string_vector & strings, size_t start, size_t mid, size_t end) {
 // the two parts together using the merge() method.
 //-----------------------------------------------------------------------------
 void mergesort(string_vector & strings, size_t start, size_t end) {
-  // TODO: implement this function, then delete this comment
+
+  if (start > end)
+  {
+    return;
+  }
   return;
 }
 
@@ -63,7 +73,16 @@ int hoare_partition(string_vector & strings, int start, int end) {
 //-----------------------------------------------------------------------------
 void quicksort(string_vector & strings, int start, int end) {
   // TODO: implement this function, then delete this comment
-  return;
+
+ 
+  //NOT SURE IF THIS WORKS, BUT BASICALLY COPIED FROM NOTES. NEED TO DO hoare_partition before testing.
+  if(start < end)
+  {
+    int pivot_point = hoare_partition(strings, start, end);
+    quicksort(strings, start, pivot_point-1);
+    quicksort(strings, pivot_point+1, end);
+  }
+  
 }
 
 
