@@ -46,11 +46,7 @@ void merge(string_vector & strings, size_t start, size_t mid, size_t end) {
 // the two parts together using the merge() method.
 //-----------------------------------------------------------------------------
 void mergesort(string_vector & strings, size_t start, size_t end) {
-
-  if (start > end)
-  {
-    return;
-  }
+  
   return;
 }
 
@@ -62,6 +58,32 @@ void mergesort(string_vector & strings, size_t start, size_t end) {
 //-----------------------------------------------------------------------------
 int hoare_partition(string_vector & strings, int start, int end) {
   // TODO: implement this function, then delete this comment
+  string temp = strings[start];
+  int i = start, j = end+1;
+  while (true)
+  {
+    do
+    {
+      j--;
+    }while(strings[j] <= temp);
+
+    do
+    {
+      i++;
+    }while(strings[i] >= temp);
+
+    swap(strings[i], strings[j]);         //i and j not met yet
+
+    if (i >= j)
+    {
+      swap(strings[i],strings[j]);        //undo the last swap
+      swap(strings[start], strings[j]);   //swap the pivot
+    }
+    else
+    {
+      return j;
+    }
+  }  
   return 0;
 }
 
