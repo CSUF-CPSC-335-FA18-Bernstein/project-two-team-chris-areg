@@ -8,6 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <fstream>
 
 #include "project2.hh"
 #include "timer.hh"
@@ -22,17 +23,26 @@ int main() {
     return 1;
   }
 
-  int n = 1000;
-  string_vector n_words(all_words.begin(), all_words.begin() + n);
+std::ofstream myfile;
+myfile.open ("quicksort.csv");
 
-  randomize_list(n_words);
+ for(int i= 0; i < 100; i++)
+  {
+   int n = 400000;
+   string_vector n_words(all_words.begin(), all_words.begin() + n);
+  
+   randomize_list(n_words);
+  
+   Timer timer;
+   quicksort(n_words);
+   double elapsed = timer.elapsed();
+   cout << "quicksort, "
+        << "n=" << n << ", "
+        << "elapsed time = " << elapsed << " seconds" << endl;
 
-  Timer timer;
-  mergesort(n_words);
-  double elapsed = timer.elapsed();
-  cout << "mergesort, "
-       << "n=" << n << ", "
-       << "elapsed time = " << elapsed << " seconds" << endl;
+      myfile << elapsed <<endl;
+  }
+  myfile.close();
 
   return 0;
 }
