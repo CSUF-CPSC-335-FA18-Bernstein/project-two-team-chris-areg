@@ -15,6 +15,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void randomize_list(string_vector & strings) {
   
   srand(time(NULL));
 
-  for(int i = 0; i < strings.size(); i++)
+  for(int i = 0; i < strings.size()-1; i++)
   {
     int random = rand() % strings.size();
     swap(strings[i], strings[random]);
@@ -57,34 +58,55 @@ void mergesort(string_vector & strings, size_t start, size_t end) {
 // It returns the index of the final position of the pivot value.
 //-----------------------------------------------------------------------------
 int hoare_partition(string_vector & strings, int start, int end) {
-  // TODO: implement this function, then delete this comment
-  string temp = strings[start];
-  int i = start, j = end+1;
-  while (true)
-  {
-    do
-    {
-      j--;
-    }while(strings[j] <= temp);
+//  // TODO: implement this function, then delete this comment
 
-    do
-    {
-      i++;
-    }while(strings[i] >= temp);
 
-    swap(strings[i], strings[j]);         //i and j not met yet
 
-    if (i >= j)
+//  string temp = strings[start];
+//  int i = start, j = end + 1;
+//  do
+//  {
+//      do
+//    {
+//      i++;
+//    }while(i < end && strings[i] < temp);
+//
+//    do
+//    {
+//      j--;
+//    }while(strings[j] > temp);
+//
+//    swap(strings[i], strings[j]);
+//
+//  }while (i < j);
+//  
+//  swap(strings[i], strings[j]);
+//  swap(strings[start], strings[j]);
+//  return j;
+//
+
+  string pivot = strings[start];
+	int i = start -1;
+	int j = end + 1;
+	while(1)
+	{
+		do 
     {
-      swap(strings[i],strings[j]);        //undo the last swap
-      swap(strings[start], strings[j]);   //swap the pivot
+			i++;
+		} while (i < end && strings[i] < pivot);
+
+		do 
+    {
+			j--;
+		} while (j > start && strings[j] > pivot);
+
+		if(i >= j)
+    {
+			return j;
     }
-    else
-    {
-      return j;
-    }
-  }  
-  return 0;
+		swap(strings[i], strings[j]);
+    //swap(strings[start], strings[j]);
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -101,7 +123,7 @@ void quicksort(string_vector & strings, int start, int end) {
   if(start < end)
   {
     int pivot_point = hoare_partition(strings, start, end);
-    quicksort(strings, start, pivot_point-1);
+    quicksort(strings, start, pivot_point);
     quicksort(strings, pivot_point+1, end);
   }
   
