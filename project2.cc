@@ -24,7 +24,7 @@ using namespace std;
 // Randomize the order of all items in the list
 //-----------------------------------------------------------------------------
 void randomize_list(string_vector & strings) {
-  
+
   srand(time(NULL));
 
   for(int i = 0; i < strings.size()-1; i++)
@@ -36,19 +36,86 @@ void randomize_list(string_vector & strings) {
 
 //-----------------------------------------------------------------------------
 void merge(string_vector & strings, size_t start, size_t mid, size_t end) {
-  
-  return;
+
+	string_vector sortedStrings; //sorted vector being returned
+	int startCount = 0;
+	int midCount = mid;
+  // IF - we get a vector with one or zero elements
+  if (strings.size() <= 1)
+  {
+    return;
+  }
+  // FOR - traversing strings
+	for (int i = 0; i < strings.size(); i++)
+	{
+		// IF - ran out of words from start
+		if (startCount >= mid)
+		{
+			sortedStrings.push_back(strings[midCount]);
+			midCount++;
+		}
+		// ELIF - ran out of words from mid
+		else if (midCount >= strings.size())
+		{
+			sortedStrings.push_back(strings[startCount]);
+			startCount++;
+		}
+		// ELIF - start word is lower
+		else if (strings[startCount] < strings[midCount])
+		{
+			sortedStrings.push_back(strings[startCount]);
+			startCount++;
+		}
+		// ELSE - mid word is lower
+		else
+		{
+			sortedStrings.push_back(strings[midCount]);
+			midCount++;
+		}
+
+	}
+  // RETURN - sorted vector
+	strings = sortedStrings;
+	return;
 }
 
 //-----------------------------------------------------------------------------
 // Sort the given list using the merge sort algorithm.
 // This is a recursive method which splits the list into two
-// parts, recursively calls itself on the two parts and then merges 
+// parts, recursively calls itself on the two parts and then merges
 // the two parts together using the merge() method.
 //-----------------------------------------------------------------------------
 void mergesort(string_vector & strings, size_t start, size_t end) {
-  
-  return;
+	int mid;
+  // IF - we receive vector with 1 or 0 elements
+	if (strings.size() <= 1)
+	{
+	   return;
+	}
+  // ElIF - we receive vector with even number of elements
+	else if (strings.size() % 2 == 0)
+	{
+	   mid = strings.size() / 2;
+	}
+  // ELSE - we receive vector with odd number of elements
+	else
+	{
+		 mid = (strings.size() + 1) / 2;
+	}
+	string_vector stringsB;  //vector with first half of words
+  stringsB.insert(stringsB.end(), strings.begin(), strings.begin() + (mid));
+	string_vector stringsC;  //vector with second half of words
+  stringsC.insert(stringsC.end(), strings.begin() + mid, strings.end());
+  //recurse with stringsB
+	mergesort(stringsB, start, mid - 1);
+  //recurse with stringsC
+	mergesort(stringsC, mid, end);
+  //merging vector
+	strings = stringsB;
+  strings.insert(strings.end(), stringsC.begin(), stringsC.end());
+  //sorting merged vector
+	merge(strings, start, mid, end);
+	return;
 }
 
 //-----------------------------------------------------------------------------
@@ -58,67 +125,35 @@ void mergesort(string_vector & strings, size_t start, size_t end) {
 // It returns the index of the final position of the pivot value.
 //-----------------------------------------------------------------------------
 int hoare_partition(string_vector & strings, int start, int end) {
-//  // TODO: implement this function, then delete this comment
 
-
-
-//  string temp = strings[start];
-//  int i = start, j = end + 1;
-//  do
-//  {
-//      do
-//    {
-//      i++;
-//    }while(i < end && strings[i] < temp);
-//
-//    do
-//    {
-//      j--;
-//    }while(strings[j] > temp);
-//
-//    swap(strings[i], strings[j]);
-//
-//  }while (i < j);
-//  
-//  swap(strings[i], strings[j]);
-//  swap(strings[start], strings[j]);
-//  return j;
-//
-
-  string pivot = strings[start];
-	int i = start -1;
-	int j = end + 1;
-	while(1)
+  string pivot = strings[start]; //word to be compared
+	int i = start;
+	int j = end;
+	while(i < j)
 	{
-		do 
-    {
-			i++;
-		} while (i < end && strings[i] < pivot);
-
-		do 
+		while (j > start && pivot < strings[j])
     {
 			j--;
-		} while (j > start && strings[j] > pivot);
+		}
+    swap(strings[i], strings[j]);
 
-		if(i >= j)
+		while(i < end && pivot > strings[i])
     {
-			return j;
-    }
+			i++;
+		}
+
 		swap(strings[i], strings[j]);
-    //swap(strings[start], strings[j]);
 	}
+	return j;
 }
 
 //-----------------------------------------------------------------------------
 // Sort the given list using the quicksort algorithm.
 // This is a recursive method which splits the list into two
-// parts, recursively calls itself on the two parts and then merges 
+// parts, recursively calls itself on the two parts and then merges
 // the two parts together using the merge() method.
 //-----------------------------------------------------------------------------
 void quicksort(string_vector & strings, int start, int end) {
-  // TODO: implement this function, then delete this comment
-
- 
   //NOT SURE IF THIS WORKS, BUT BASICALLY COPIED FROM NOTES. NEED TO DO hoare_partition before testing.
   if(start < end)
   {
@@ -126,13 +161,13 @@ void quicksort(string_vector & strings, int start, int end) {
     quicksort(strings, start, pivot_point);
     quicksort(strings, pivot_point+1, end);
   }
-  
+
 }
 
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-// ALREADY IMPLEMENTED 
+// ALREADY IMPLEMENTED
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
@@ -141,7 +176,7 @@ void quicksort(string_vector & strings, int start, int end) {
 // cleared, and then each word from the file is added to the
 // vector. Returns true on success or fale on I/O error.
 //-----------------------------------------------------------------------------
-bool load_words(string_vector& words, const std::string& path) 
+bool load_words(string_vector& words, const std::string& path)
 {
   //std::cout << "Loading words from [" << path << "]" << std::endl;
   words.clear();
@@ -166,7 +201,7 @@ bool load_words(string_vector& words, const std::string& path)
 
 //-----------------------------------------------------------------------------
 // Sort the given list using the merge sort algorithm.
-// This method is simply a helper to make the initial 
+// This method is simply a helper to make the initial
 // call the recursive mergesort() method below that requires
 // first and last indexes for sorting range
 //-----------------------------------------------------------------------------
@@ -180,7 +215,7 @@ void mergesort(string_vector & strings) {
 
 //-----------------------------------------------------------------------------
 // Sort the given list using the quicksort algorithm.
-// This method is simply a helper to make the initial 
+// This method is simply a helper to make the initial
 // call the recursive mergesort() method below that requires
 // first and last indexes for sorting range
 //-----------------------------------------------------------------------------
@@ -191,4 +226,3 @@ void quicksort(string_vector & strings) {
   quicksort(strings, 0, strings.size() - 1);
   return;
 }
-

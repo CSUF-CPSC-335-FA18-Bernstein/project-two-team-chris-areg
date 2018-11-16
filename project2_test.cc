@@ -19,12 +19,12 @@ using namespace std;
 int main() {
 
   string_vector test0 = {  };
-  
+
   string_vector test1 = { "titans" };
-  
+
   string_vector test8 = {
     "horse", "mouse", "dog", "rat", "cat", "cow", "pig", "donkey" };
-  
+
   string_vector words_txt;
   bool load_words_ok = load_words(words_txt, "words.txt");
 
@@ -84,7 +84,7 @@ int main() {
              string_vector origb = n_words;
 			 sort(origb.begin(), origb.end());
 		     TEST_TRUE("true: 10,000 words", origa == origb);
-		   });
-
+		   }
+);
   return rubric.run();
 }
