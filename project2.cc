@@ -23,53 +23,53 @@ using namespace std;
 //-----------------------------------------------------------------------------
 // Randomize the order of all items in the list
 //-----------------------------------------------------------------------------
-void randomize_list(string_vector & strings) {
+void randomize_list( string_vector &strings ) {
 
-  srand(time(NULL));
+  srand( time( NULL ) );
 
-  for(int i = 0; i < strings.size()-1; i++)
+  for( int i = 0; i < strings.size()-1; i++ )
   {
     int random = rand() % strings.size();
-    swap(strings[i], strings[random]);
+    swap( strings[i], strings[random] );
   }
 }
 
 //-----------------------------------------------------------------------------
-void merge(string_vector & strings, size_t start, size_t mid, size_t end) {
+void merge( string_vector &strings, size_t start, size_t mid, size_t end ) {
 
 	string_vector sortedStrings; //sorted vector being returned
 	int startCount = 0;
 	int midCount = mid;
   // IF - we get a vector with one or zero elements
-  if (strings.size() <= 1)
+  if ( strings.size() <= 1 )
   {
     return;
   }
   // FOR - traversing strings
-	for (int i = 0; i < strings.size(); i++)
+	for ( int i = 0; i < strings.size(); i++ )
 	{
 		// IF - ran out of words from start
-		if (startCount >= mid)
+		if ( startCount >= mid )
 		{
-			sortedStrings.push_back(strings[midCount]);
+			sortedStrings.push_back( strings[midCount] );
 			midCount++;
 		}
 		// ELIF - ran out of words from mid
-		else if (midCount >= strings.size())
+		else if ( midCount >= strings.size() )
 		{
-			sortedStrings.push_back(strings[startCount]);
+			sortedStrings.push_back( strings[startCount] );
 			startCount++;
 		}
 		// ELIF - start word is lower
-		else if (strings[startCount] < strings[midCount])
+		else if ( strings[startCount] < strings[midCount] )
 		{
-			sortedStrings.push_back(strings[startCount]);
+			sortedStrings.push_back( strings[startCount] );
 			startCount++;
 		}
 		// ELSE - mid word is lower
 		else
 		{
-			sortedStrings.push_back(strings[midCount]);
+			sortedStrings.push_back( strings[midCount] );
 			midCount++;
 		}
 
@@ -85,36 +85,36 @@ void merge(string_vector & strings, size_t start, size_t mid, size_t end) {
 // parts, recursively calls itself on the two parts and then merges
 // the two parts together using the merge() method.
 //-----------------------------------------------------------------------------
-void mergesort(string_vector & strings, size_t start, size_t end) {
+void mergesort( string_vector & strings, size_t start, size_t end ) {
 	int mid;
   // IF - we receive vector with 1 or 0 elements
-	if (strings.size() <= 1)
+	if ( strings.size() <= 1 )
 	{
 	   return;
 	}
   // ElIF - we receive vector with even number of elements
-	else if (strings.size() % 2 == 0)
+	else if ( strings.size() % 2 == 0 )
 	{
 	   mid = strings.size() / 2;
 	}
   // ELSE - we receive vector with odd number of elements
 	else
 	{
-		 mid = (strings.size() + 1) / 2;
+		 mid = ( strings.size() + 1 ) / 2;
 	}
 	string_vector stringsB;  //vector with first half of words
-  stringsB.insert(stringsB.end(), strings.begin(), strings.begin() + (mid));
+  stringsB.insert( stringsB.end(), strings.begin(), strings.begin() + mid );
 	string_vector stringsC;  //vector with second half of words
-  stringsC.insert(stringsC.end(), strings.begin() + mid, strings.end());
+  stringsC.insert( stringsC.end(), strings.begin() + mid, strings.end() );
   //recurse with stringsB
-	mergesort(stringsB, start, mid - 1);
+	mergesort( stringsB, start, mid - 1 );
   //recurse with stringsC
-	mergesort(stringsC, mid, end);
+	mergesort( stringsC, mid, end );
   //merging vector
 	strings = stringsB;
-  strings.insert(strings.end(), stringsC.begin(), stringsC.end());
+  strings.insert( strings.end(), stringsC.begin(), stringsC.end() );
   //sorting merged vector
-	merge(strings, start, mid, end);
+	merge( strings, start, mid, end );
 	return;
 }
 
@@ -124,26 +124,29 @@ void mergesort(string_vector & strings, size_t start, size_t end) {
 // and divides the list into less than and greater than the pivot value
 // It returns the index of the final position of the pivot value.
 //-----------------------------------------------------------------------------
-int hoare_partition(string_vector & strings, int start, int end) {
+int hoare_partition( string_vector &strings, int start, int end ) {
 
   string pivot = strings[start]; //word to be compared
-	int i = start;
-	int j = end;
-	while(i < j)
+	int i = start; //counter starts from beginning
+	int j = end;   //counter starts from end
+	while ( i < j )
 	{
-		while (j > start && pivot < strings[j])
+    //helps sort words before partition
+		while ( j > start && pivot < strings[j] )
     {
 			j--;
 		}
-    swap(strings[i], strings[j]);
-
-		while(i < end && pivot > strings[i])
+    //puts word before pivot
+    swap( strings[i], strings[j] );
+    //helps sort words after partition
+		while ( i < end && pivot > strings[i] )
     {
 			i++;
 		}
-
-		swap(strings[i], strings[j]);
+    //puts word after pivot
+		swap( strings[i], strings[j] );
 	}
+  // RETURN - pivot point
 	return j;
 }
 
@@ -153,15 +156,17 @@ int hoare_partition(string_vector & strings, int start, int end) {
 // parts, recursively calls itself on the two parts and then merges
 // the two parts together using the merge() method.
 //-----------------------------------------------------------------------------
-void quicksort(string_vector & strings, int start, int end) {
-  //NOT SURE IF THIS WORKS, BUT BASICALLY COPIED FROM NOTES. NEED TO DO hoare_partition before testing.
-  if(start < end)
+void quicksort( string_vector &strings, int start, int end ) {
+  // IF - # of strings is not 0 or 1
+  if( start < end )
   {
-    int pivot_point = hoare_partition(strings, start, end);
-    quicksort(strings, start, pivot_point);
-    quicksort(strings, pivot_point+1, end);
+    //finds pivot point
+    int pivot_point = hoare_partition( strings, start, end );
+    //quicksorts left half
+    quicksort( strings, start, pivot_point );
+    //quicksorts right half
+    quicksort( strings, pivot_point+1, end );
   }
-
 }
 
 
